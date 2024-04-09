@@ -1,0 +1,40 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    min-height: 500px;
+
+}
+
+  .dashboard-header {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: black;
+    margin: 50px;
+  }
+
+  .dashboard-welcome {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: black;
+  }
+
+
+  @media (max-width: 767px) {
+
+    .dashboard-welcome {
+      margin: 10px;
+      font-size:18px;
+    }
+
+
+    .dashboard-header {
+      margin: 10px;
+      font-size:24px;
+    }
+
+
+
+  }
