@@ -10,4 +10,5 @@ router.register(r"versions", views.VersionViewSet)
 urlpatterns = [
     path("", include((router.urls, "documents"))),
     path("", include((router.urls, "versions"))),
+    path("get_versions/", views.VersionsAPIView.as_view()),
 ]

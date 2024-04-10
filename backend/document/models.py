@@ -1,5 +1,6 @@
 # document/views.py
 from django.db import models
+import uuid
 
 
 class Document(models.Model):
@@ -16,6 +17,7 @@ class Document(models.Model):
 
 
 class Version(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
