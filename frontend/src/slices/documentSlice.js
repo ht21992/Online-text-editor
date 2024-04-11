@@ -55,21 +55,23 @@ export const createNewDocumentAsync =
     try {
       const res = await axios.post("/api/documents/docs/", body, config);
       dispatch(addDocument(res.data));
-      toast.success("document has been saved");
+      toast.success("document has been created");
     } catch (err) {
 
       toast.error(`Error While Creating a document - ${err.message}`);
     }
   };
 
-export const updateDocumentAsync = (id,title,content,owner) => async (dispatch) => {
+export const updateDocumentAsync = (id,title,content,owner,versionCreation="",silent=false) => async (dispatch) => {
   const config = getConfig();
 
   const body = JSON.stringify({
     content: content,
     title: title,
     owner: owner.user_id,
+    versionCreation:versionCreation
   });
+
 
   try {
     const response = await axios.put(
@@ -80,7 +82,18 @@ export const updateDocumentAsync = (id,title,content,owner) => async (dispatch) 
 
 
     dispatch(updateDocument(response.data));
-    toast.success("document has been updated");
+    if (!silent){
+      if (versionCreation === ""){
+
+        toast.success("document has been saved");
+      }
+      else{
+        toast.success("title updated");
+      }
+
+    }
+
+
   } catch (err) {
 
     toast.error(`Error While Updating a document - ${err.message}`);
@@ -106,6 +119,7 @@ const DocumentSlice = createSlice({
       state.documents.unshift(action.payload);
       const documentsListArr = state.documents;
       state.documents = [...documentsListArr];
+      state.document = action.payload
     },
     deleteDocument: (state, action) => {
       const documentsListArr = state.documents;

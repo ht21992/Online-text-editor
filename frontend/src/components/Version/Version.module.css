@@ -1,0 +1,22 @@
+.versionContainer{
+    cursor: pointer;
+    border-bottom: 1px dashed black;
+    margin-top: 5px;
+    padding: 2px;
+}
+
+.versionText{
+    font-size: 12px;
+    font-weight: bolder;
+
+}
+
+.versionContainer:hover{
+  background-color: #646cff;
+  color: white;
+}
+
+.versionDate{
+    font-size: 10px;
+
+}

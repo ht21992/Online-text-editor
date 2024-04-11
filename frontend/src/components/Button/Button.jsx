@@ -1,55 +1,36 @@
 import React from "react";
 import { getClasses } from "../../utils/getClasses";
-import styles from "./Button.module.scss";
+import styles from "./Button.module.css";
 import classNames from "classnames";
+
+
 
 const buttonTypes = {
   primary: "primary",
-  secondary: "secondary",
+  dark: "dark",
   danger: "danger",
-  modal: "modal",
+  success:"success"
 };
 
-const Button = ({
-  type,
-  classes,
-  variant,
-  dataDismiss,
-  ariaLabel,
-  onClick,
-  extrastyle,
-  ...rest
-}) => {
-  var classes = getClasses([classes]);
 
-  var btnClass = classNames(
-    `${classes}`,
-    `${styles.button}`,
-    `${styles[`button--${buttonTypes[variant]}`]}`
-  );
+const Button = ({type, variant, classes,text, onClick,iconClass, ...rest}) => {
 
-  return (
-    <button
-      type={type}
-      className={btnClass}
-      data-dismiss={dataDismiss}
-      aria-label={ariaLabel}
-      onClick={onClick}
-      style={extrastyle}
-      {...rest}
-    >
-      {rest.children}
-    </button>
-  );
-};
+  let extraClasses = getClasses([classes])
+
+  let btnClasses = classNames('btn',`${extraClasses}`, `${styles.button}`, `${styles[`btn--${buttonTypes[variant]}`]}`)
+
+
+  return (<button type={type} className={btnClasses} onClick={onClick} {...rest}>{iconClass !=="" && (<i className={iconClass}></i>)} {text} {rest.children}</button>)
+
+}
+
 
 Button.defaultProps = {
   classes: "",
   type: "button",
   variant: "primary",
-  dataDismiss: "",
-  ariaLabel: "",
-  extrastyle: {},
+  text:"button",
+  iconClass:"",
   onClick: () => null,
 };
 

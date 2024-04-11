@@ -1,9 +1,26 @@
 @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css");
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap");
 
+
+
+
+
+:root {
+  --primary : #5b5ea6;
+  --white : #fff;
+  --danger : #9b2335;
+  --warning : #e0b722;
+  --success : #009B77;
+  --gray : #999;
+  --black : #343a40;
+
+}
+
+
+
 .body {
   font-family: "Roboto Condensed", sans-serif;
-  background: #5b5ea6;
+  background: var(--primary);
   transition: all 0.5s;
   padding: 1px;
   min-height: 100vh;
@@ -35,7 +52,7 @@
   height: 0;
   border-style: solid;
   border-width: 0 20px 34.6px 20px;
-  border-color: transparent transparent #fff transparent;
+  border-color: transparent transparent var(--white) transparent;
 }
 
 .circle {
@@ -44,7 +61,7 @@
   height: 20px;
   background-color: transparent;
 
-  border: 2px solid #fff;
+  border: 2px solid var(--white);
 
   border-radius: 50%;
 }
@@ -55,7 +72,7 @@
   height: 20px;
   background-color: transparent;
 
-  border: 2px solid #fff;
+  border: 2px solid var(--white);
 }
 
 @keyframes floatShapes {
@@ -95,7 +112,7 @@
   height: 40px;
   padding: 5px 15px;
   width: 100%;
-  border: solid 1px #999;
+  border: solid 1px var(--gray);
   transition: all 0.3s ease;
 }
 
@@ -106,7 +123,7 @@
 }
 
 .formContainer > .wrapper.move input:focus {
-  border-color: #e0b722;
+  border-color: var(--warning);
 }
 
 .formContainer.move {
@@ -117,30 +134,30 @@
   display: table-cell;
   vertical-align: middle;
   text-align: center;
-  color: #fff;
+  color: var(--white);
 }
 
 .formContainer button {
   background: transparent;
   display: inline-block;
   padding: 10px 30px;
-  border: 3px solid #fff;
+  border: 3px solid var(--white);
   border-radius: 50px;
   background-clip: padding-box;
   position: relative;
-  color: #fff;
+  color: var(--white);
 
   transition: all 0.25s;
 }
 
 .formContainer button.highlight {
-  border-color: #5b5ea6;
-  background: #5b5ea6;
+  border-color: var(--primary);
+  background: var(--primary);
 }
 
 .formContainer .move button.highlight {
-  border-color: #9b2335;
-  background: #9b2335;
+  border-color: var(--danger);
+  background: var(--danger);
 }
 
 .formContainer .splits p {
@@ -161,7 +178,7 @@
   height: 120%;
   top: -10%;
   left: 5%;
-  background: #fff;
+  background: var(--white);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
   transition: all 0.5s;
   color: #303030;
@@ -172,7 +189,7 @@
   padding: 15px 30px 30px;
   width: 100%;
   transition: all 0.5s;
-  background: #fff;
+  background: var(--white);
   width: 100%;
 }
 
@@ -210,11 +227,11 @@
   top: -7px;
   font-size: 12px;
   white-space: nowrap;
-  background: #fff;
+  background: var(--white);
   text-align: left;
   left: 15px;
   padding: 0 5px;
-  color: #999;
+  color: var(--gray);
   pointer-events: none;
 }
 
@@ -226,19 +243,19 @@
   height: 40px;
   padding: 5px 15px;
   width: 100%;
-  border: solid 1px #999;
+  border: solid 1px var(--gray);
 }
 
 .formContainer .wrapper input {
   height: 40px;
   padding: 5px 15px;
   width: 100%;
-  border: solid 1px #999;
+  border: solid 1px var(--gray);
 }
 
 .formContainer .wrapper input:focus {
   outline: none;
-  border-color: #5b5ea6;
+  border-color: var(--primary);
 }
 
 .formContainer > .wrapper.move {
@@ -246,7 +263,7 @@
 }
 
 .formContainer > .wrapper.move input:focus {
-  border-color: #9b2335;
+  border-color: var(--danger);
 }
 
 
@@ -258,13 +275,13 @@
 .dashboard-header {
   font-size: 36px;
   margin-bottom: 100px;
-  color: white;
+  color: var(--white);
 }
 
 .dashboard-welcome {
   font-size: 24px;
   margin-bottom: 20px;
-  color: white;
+  color: var(--white);
 }
 
 @media (max-width: 767px) {
@@ -307,11 +324,11 @@
 
   .splits button.active {
     opacity: 1;
-    background: #5b5ea6;
+    background: var(--primary);
   }
 
   .splits.rgstr-btn button.active {
-    background: #9b2335;
+    background: var(--danger);
   }
 
   .splits p {
@@ -338,5 +355,29 @@
 input:-webkit-autofill,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
-  box-shadow: inset 0 0 0 50px #fff;
+  box-shadow: inset 0 0 0 50px var(--white);
+}
+
+
+
+/* Style the scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Style the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+/* Style the scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--gray);
 }

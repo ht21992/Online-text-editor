@@ -1,16 +1,8 @@
 import React, { useState, useEffect, Fragment, useContext } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import dateFormat from "dateformat";
-import Button from "../Button/Button";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { getClasses } from "../../utils/getClasses";
 import { SideBar } from "./SideBar";
 import { useDispatch, useSelector } from "react-redux";
-import Card from "../Card/Card";
-import { CardBody } from "../Card/partials/CardPartials";
-import Image from "../Image/Image";
-import OnlineEditorStyles from "./styles/OnlineEditor.module.css";
-import classNames from "classnames";
 import CustomToolBarPlaceholder from "./CustomToolBarPlaceholder";
 import {
   convertFromRaw,
@@ -18,65 +10,122 @@ import {
   EditorState,
   ContentState,
 } from "draft-js";
-import toast from "react-hot-toast";
-
-import axios from "axios";
 import { DashboardContext } from "../../context/dashboardContext";
-import { updateDocumentAsync, createNewDocumentAsync } from "../../slices/documentSlice";
+import {
+  updateDocumentAsync,
+  createNewDocumentAsync,
+} from "../../slices/documentSlice";
+import { fetchVersionsAsync } from "../../slices/versionSlice";
+import { toast } from "react-hot-toast";
 export const OnlineEditor = ({}) => {
-  const dispatch = useDispatch()
-  const {currentDocument} = useContext(DashboardContext);
+  const dispatch = useDispatch();
+  const { currentDocument, setCurrentDocument } = useContext(DashboardContext);
 
   const user = useSelector((state) => state.auth.user);
+  const document = useSelector((state) => state.document.document);
+  const version = useSelector((state) => state.version.version);
   const [currentText, setCurrentText] = useState("");
   const [content, setContent] = useState({});
+  const [title, setTitle] = useState("No Title");
+  const [isVersion, setIsVersion] = useState(false);
   const [changed, setChanged] = useState({ text: "", flag: false });
 
   const [editorState, setEditorState] = useState(
     EditorState.createWithContent(ContentState.createFromText(""))
   );
 
+  useEffect(() => {
+    if (Object.keys(version).length > 0) {
+      // console.log(mergeVersions(version.content,currentDocument.content))
+      const parsedVersionContent = JSON.parse(version.content);
+      setEditorState(
+        EditorState.createWithContent(convertFromRaw(parsedVersionContent))
+      );
+      setIsVersion(true);
+    }
+  }, [version]);
 
   useEffect(() => {
+    handleShowCurrentVersion();
+  }, [currentDocument.content]);
+
+  const handleShowCurrentVersion = () => {
+    let content = null;
     if (currentDocument.content) {
-      const parsedContent = JSON.parse(currentDocument.content);
+      content = currentDocument.content;
+    }
+    if (document.content) {
+      content = document.content;
+    }
+
+    if (content) {
+      const parsedContent = JSON.parse(content);
       setEditorState(
         EditorState.createWithContent(convertFromRaw(parsedContent))
       );
+      setTitle(currentDocument.title);
+      setIsVersion(false);
+      //  If we have a normal text
       // setEditorState(
       //   EditorState.createWithContent(ContentState.createFromText(currentDocument.content))
       // );
-
     }
-
-  },[currentDocument.content])
-
-  const handleOnBlurEditorCandidate = (e) => {
-    console.log("on Blur handle ....");
   };
 
-  const handleOnDraft = () => {
+  const handleOnBlurEditorCandidate = (e) => {
+    if (currentDocument.content) {
+      callDocSlice(title, true, true);
+    }
+  };
 
+  function handleKeyDown(event) {
+    if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+      event.preventDefault(); // Save
+      callDocSlice(title);
+    }
+  }
+
+  const callDocSlice = (title, versionCreation = "", silent = false) => {
     const jsonContent = JSON.stringify(
       convertToRaw(editorState.getCurrentContent())
     );
-    if (currentDocument.content) {
-      let documentID = currentDocument.id;
-      let title = currentDocument.title;
-      dispatch(updateDocumentAsync(documentID,
-        title,
-        jsonContent,
-        user))
+    if (currentDocument.id || document.id) {
+      // if (!editorState.getCurrentContent().hasText()) return;
+      let documentID = currentDocument.id || document.id;
+      dispatch(
+        updateDocumentAsync(
+          documentID,
+          title,
+          jsonContent,
+          user,
+          versionCreation,
+          silent
+        )
+      );
+      dispatch(fetchVersionsAsync(documentID)); // fetch versions
+    } else {
+      dispatch(createNewDocumentAsync(title, jsonContent, user));
     }
-    else{
-      dispatch(createNewDocumentAsync("fake title",jsonContent,user))
-    }
+  };
 
+  const onUpdateTitle = (newTitle) => {
+    if (newTitle === title) return;
+
+    setTitle(newTitle);
+    callDocSlice(newTitle, true);
+  };
+
+  const handleOnSave = () => {
+    callDocSlice(title);
   };
 
   return (
     <Fragment>
-      <div className="container mt-4 mb-5" style={{ width: "100%" }}>
+      <div
+        className="container mt-4 mb-5"
+        style={{ width: "100%" }}
+        onKeyDown={(e) => handleKeyDown(e)}
+      >
         <div className="row align-items start">
           <div className="col-lg-8 ">
             <article>
@@ -118,9 +167,9 @@ export const OnlineEditor = ({}) => {
                   <CustomToolBarPlaceholder
                     icons={[
                       {
-                        onClick: handleOnDraft,
+                        onClick: handleOnSave,
                         classes: "btn fa fa-save",
-                        title: "save draft",
+                        title: "save (Ctr + s)",
                       },
                     ]}
                   />,
@@ -152,25 +201,6 @@ export const OnlineEditor = ({}) => {
                     setChanged({ text: "", flag: false });
                   }
 
-                  //   setCurrentText(
-                  //     editorState.getCurrentContent().getPlainText()
-                  //   );
-
-                  //   if (
-                  //     !changed.flag &&
-                  //     currentText !== "" &&
-                  //   currentText !==
-                  //     editorState.getCurrentContent().getPlainText();
-                  //   ) {
-                  //     setChanged({ text: currentText, flag: true });
-                  //   }
-                  //   if (
-                  //     editorState.getCurrentContent().getPlainText() ===
-                  //     changed.text
-                  //   ) {
-                  //     setChanged({ text: "", flag: false });
-                  //   }
-
                   setCurrentText(
                     editorState.getCurrentContent().getPlainText()
                   );
@@ -184,7 +214,12 @@ export const OnlineEditor = ({}) => {
             </article>
           </div>
           <div className="col-lg-4">
-            <SideBar/>
+            <SideBar
+              title={title}
+              onUpdateTitle={onUpdateTitle}
+              isVersion={isVersion}
+              handleShowCurrentVersion={handleShowCurrentVersion}
+            />
           </div>
         </div>
       </div>

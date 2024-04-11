@@ -1,0 +1,46 @@
+
+.btn--primary {
+	border-width: thin;
+	border-style: solid;
+	border-color: var(--primary);
+	color: var(--primary);
+}
+.btn--primary:disabled {
+	opacity: 0.3;
+	pointer-events: none;
+}
+.btn--primary:hover {
+	background-color: var(--primary);
+	color: var(--white);
+}
+.btn--danger {
+	border-width: thin;
+	border-style: solid;
+	border-color: var(--danger);
+	color: var(--danger);
+}
+.btn--danger:hover {
+	background-color: var(--danger);
+	color: var(--white);
+}
+
+.btn--success {
+	border-width: thin;
+	border-style: solid;
+	border-color: var(--success);
+	color: var(--success);
+}
+.btn--success:hover {
+	background-color: var(--success);
+	color: var(--white);
+}
+.btn--dark {
+	border-width: thin;
+	border-style: solid;
+	border-color: var(--black);
+	color: var(--black);
+}
+.btn--dark:hover {
+	background-color: var(--black);
+	color: var(--white);
+}

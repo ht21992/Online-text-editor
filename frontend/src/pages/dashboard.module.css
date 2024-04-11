@@ -11,14 +11,14 @@
   .dashboard-header {
     font-size: 36px;
     margin-bottom: 20px;
-    color: black;
+    color: var(--white);
     margin: 50px;
   }
 
   .dashboard-welcome {
     font-size: 24px;
     margin-bottom: 20px;
-    color: black;
+    color: var(--white);
   }
 
 
